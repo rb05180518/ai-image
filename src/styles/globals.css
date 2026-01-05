@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* 在使用dark:bg-primary时有效 */
+@custom-variant dark (&:is(.dark *));
+
+
+/* inline为了能在className中，例如：text-primary使用 */
+@theme inline {
+  /* --color告诉tailwindcss这是颜色 */
+  --color-base-100: var(--base-100); 
+  --color-base-200: var(--base-200);
+  --color-base-300: var(--base-300);
+  --color-base-content: var(--base-content);
+  --color-primary: var(--primary);
+  --color-primary-content: var(--primary-content);
+  --color-secondary: var(--secondary);
+  --color-secondary-content: var(--secondary-content);
+  --color-accent: var(--accent);
+  --color-accent-content: var(--accent-content);
+  --color-neutral: var(--neutral);
+  --color-neutral-content: var(--neutral-content);
+  --color-info: var(--info);
+  --color-info-content: var(--info-content);
+  --color-success: var(--success);
+  --color-success-content: var(--success-content);
+  --color-warning: var(--warning);
+  --color-warning-content: var(--warning-content);
+  --color-error: var(--error);
+  --color-error-content: var(--error-content);
+}
+
+/* 在某个css文件中想要使用inline中的，可以 color: var(--color-primary) */
+
+/* root就等同于html，但 :root 的优先级比 html 更高 */
+:root {
+  --base-100: oklch(100% 0 0);
+  --base-200: oklch(98.462% 0.001 247.838);
+  --base-300: oklch(92.462% 0.001 247.838);
+  --base-content: oklch(20% 0 0);
+  --primary: #990efa;
+  --primary-content: oklch(49% 0.265 301.924);
+  --secondary: oklch(89% 0.058 10.001);
+  --secondary-content: oklch(51% 0.222 16.935);
+  --accent: oklch(90% 0.093 164.15);
+  --accent-content: oklch(50% 0.118 165.612);
+  --neutral: oklch(55% 0.046 257.417);
+  --neutral-content: oklch(92% 0.013 255.508);
+  --info: oklch(86% 0.127 207.078);
+  --info-content: oklch(52% 0.105 223.128);
+  --success: oklch(87% 0.15 154.449);
+  --success-content: oklch(52% 0.154 150.069);
+  --warning: oklch(83% 0.128 66.29);
+  --warning-content: oklch(55% 0.195 38.402);
+  --error: oklch(80% 0.114 19.571);
+  --error-content: oklch(50% 0.213 27.518);
+
+
+  /* 导航粒子颜色 */
+  --color-1: #00ffff;  /* 青色霓虹 - Cyan Neon */
+  --color-2: #ff00ff;  /* 洋红霓虹 - Magenta Neon */
+  --color-3: #7c3aed;  /* 紫色 - Purple */
+  --color-4: #fbbf24;  /* 金色 - Gold */
+  --color-13: #10b981; /* 翠绿 - Emerald */
+}
+
+:root[data-theme='dark'] {
+  --base-100: oklch(25.33% 0.016 252.42);
+  --base-200: oklch(23.26% 0.014 253.1);
+  --base-300: oklch(21.15% 0.012 254.09);
+  --base-content: oklch(97.807% 0.029 256.847);
+  --primary: oklch(58% 0.233 277.117);
+  --primary-content: oklch(96% 0.018 272.314);
+  --secondary: oklch(65% 0.241 354.308);
+  --secondary-content: oklch(94% 0.028 342.258);
+  --accent: oklch(77% 0.152 181.912);
+  --accent-content: oklch(38% 0.063 188.416);
+  --neutral: oklch(14% 0.005 285.823);
+  --neutral-content: oklch(92% 0.004 286.32);
+  --info: oklch(74% 0.16 232.661);
+  --info-content: oklch(29% 0.066 243.157);
+  --success: oklch(76% 0.177 163.223);
+  --success-content: oklch(37% 0.077 168.94);
+  --warning: oklch(82% 0.189 84.429);
+  --warning-content: oklch(41% 0.112 45.904);
+  --error: oklch(71% 0.194 13.428);
+  --error-content: oklch(27% 0.105 12.094);
+}
+
+
+
+
+
+
+@layer base {
+  /* 通配符设置样式 */
+  * {
+    /* @apply border-border outline-ring/50; */
+    /* font-size: 40px; */
+  }
+  body {
+    /* @apply bg-background text-foreground; */
+  }
+}

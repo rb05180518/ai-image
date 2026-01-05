@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const arr = [1, 2, 3, 4, 5, 6, 7, 8];
+
+      // 执行某个任务
+      function doTask(item) {
+        console.log("查询到的数字", item);
+      }
+
+      function sleep(time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+      }
+
+      // 查询符合条件的任务
+      async function findTasks() {
+        console.log("开始查询任务");
+
+        const res = arr.filter((item) => {
+          return item > 4;
+        });
+
+        res.forEach((item) => doTask(item));
+
+        // 这个任务执行了多久
+        await sleep(10000);
+      }
+
+      async function poll() {
+        while (true) {
+          await findTasks();
+
+          // 这里是为了设置每隔多少秒查一次任务
+          await sleep(1000);
+        }
+      }
+
+      poll();
+    </script>
+  </body>
+</html>

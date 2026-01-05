@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+
+import SplashCursor from "@/components/SplashCursor/Index";
+import Header from "@/layouts/Header/Index";
+import AntdRegistry from "@/components/AntdRegistry/Index";
+import ThemeProvider from "@/components/ThemeProvider/Index";
+import "@/styles/globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +28,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-base-100`}
       >
-        {children}
+        {/* 主题切换 */}
+        <ThemeProvider>
+          {/* 解决ssr阶段样式闪烁 */}
+          <AntdRegistry>
+            <SplashCursor />
+            {/* 内容宽度 */}
+            <div className="max-w-295 p-4 md:py-6 mx-auto w-full relative h-full">
+              <Header className="w-full sticky top-6 z-50" />
+
+              {/* 内容 */}
+              <main>{children}</main>
+            </div>
+          </AntdRegistry>
+        </ThemeProvider>
       </body>
     </html>
   );
