@@ -38,8 +38,8 @@ export default function RootLayout({
           <AntdRegistry>
             <SplashCursor />
             {/* 内容宽度 */}
-            <div className="max-w-295 p-4 md:py-6 mx-auto w-full relative h-full">
-              <Header className="w-full sticky top-6 z-50" />
+            <div className="p-4 md:p-0">
+              <Header className="max-w-7xl sticky top-6 z-50 mx-auto" />
 
               {/* 内容 */}
               <main>{children}</main>

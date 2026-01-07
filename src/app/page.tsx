@@ -4,6 +4,8 @@ import BounceCards from "@/components/BounceCards/Index";
 import SplitText from "@/components/SplitText/Index";
 import Prompt from "./components/Prompt";
 import Carousel from "./components/Carousel";
+import { useEffect, useState } from "react";
+import classNames from "classnames";
 
 const images = [
   "/home/1.jpeg",
@@ -26,16 +28,28 @@ const transformStyles = [
 ];
 
 export default function Home() {
+  const [isShow, setIsShow] = useState(false);
   const handleAnimationComplete = () => {
     console.log("All letters have animated!");
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsShow(true);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="h-screen">
       <div className="h-full">
         <SplitText
           text="We don't produce images, we simply deliver AI-generated art."
-          className="mt-12 md:mt-18 text-4xl md:text-6xl font-bold text-base-content mx-auto text-center overflow-visible!"
+          className={classNames(
+            "mt-12 md:mt-18 text-4xl md:text-6xl font-bold text-base-content max-w-7xl block! mx-auto text-center overflow-visible!",
+            { "opacity-0": !isShow }
+          )}
           delay={100}
           duration={0.1}
           ease="power3.out"

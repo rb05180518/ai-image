@@ -96,16 +96,14 @@ export default function CarouselComponent({ className }: CarouselProps) {
   }, [api]);
 
   return (
-    <div
-      className={`w-screen md:w-[calc(100vw-8px)] relative left-[50%] right-[50%] -mx-[50vw] ${className} px-4 md:px-0`}
-    >
+    <div className={`w-full ${className}`}>
       {/* 标题 */}
-      <h2 className="text-xl md:pl-2 font-medium text-base-content ">
+      <h2 className="text-xl font-medium text-base-content ">
         What&apos;s new
       </h2>
 
       {/* 轮播图容器 */}
-      <div className="relative mt-4 md:pl-2">
+      <div className="relative mt-4">
         {/* 左箭头按钮 - 仅桌面端显示 */}
         {canScrollPrev && (
           <button
