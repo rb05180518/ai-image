@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Input } from "antd";
 import { ImageIcon, ArrowUpIcon, VideoIcon, Dices } from "lucide-react";
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import classNames from "classnames";
 
 const { TextArea } = Input;

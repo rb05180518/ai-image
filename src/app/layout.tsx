@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import SplashCursor from "@/components/SplashCursor/Index";
-import Header from "@/layouts/Header/Index";
 import AntdRegistry from "@/components/AntdRegistry/Index";
+
 import ThemeProvider from "@/components/ThemeProvider/Index";
 import "@/styles/globals.css";
 
@@ -28,25 +29,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-base-100`}
-      >
-        {/* 主题切换 */}
-        <ThemeProvider>
-          {/* 解决ssr阶段样式闪烁 */}
-          <AntdRegistry>
-            <SplashCursor />
-            {/* 内容宽度 */}
-            <div className="p-4 md:p-0">
-              <Header className="max-w-7xl sticky top-6 z-50 mx-auto" />
-
-              {/* 内容 */}
-              <main>{children}</main>
-            </div>
-          </AntdRegistry>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-base-100`}
+        >
+          <ThemeProvider>
+            {/* 解决ssr阶段样式闪烁 */}
+            <AntdRegistry>
+              <SplashCursor />
+              {/* 内容宽度 */}
+              <div className="p-4 md:p-0">
+                {/* 内容 */}
+                <main>{children}</main>
+              </div>
+            </AntdRegistry>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

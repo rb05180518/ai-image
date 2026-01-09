@@ -6,6 +6,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { SunMoon, Menu, X } from "lucide-react";
+import { Button } from "antd";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 interface NavItem {
   label: string;
@@ -86,6 +94,27 @@ const Header = (props: IProps) => {
             ))}
           </ul>
         </nav>
+
+        <div className="mr-6">
+          <Button
+            className="px-2.5! py-1.5! rounded-[10px]! bg-base-content text-base-100"
+            color="default"
+            variant="solid"
+          >
+            <Link href="/sign-in">Sign in</Link>
+          </Button>
+          {/* SignedOut是在用户没有登录才显示 */}
+          {/* <SignedOut>
+            <SignInButton>
+              
+            </SignInButton>
+          </SignedOut> */}
+
+          {/* 登录后显示 */}
+          {/* <SignedIn>
+            <UserButton />
+          </SignedIn> */}
+        </div>
         <button
           className="cursor-pointer text-base-content"
           onClick={handleChangeTheme}
