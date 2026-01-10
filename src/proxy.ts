@@ -1,6 +1,18 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+// 定义需要登录才能访问的路由
+const isProtectedRoute = createRouteMatcher([
+  '/image-generator(.*)',
+  '/pricing(.*)',
+  // 添加其他需要保护的路由
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  // 如果是受保护的路由，要求用户登录
+  if (isProtectedRoute(req)) {
+    await auth.protect();
+  }
+});
 
 export const config = {
   matcher: [

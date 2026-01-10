@@ -95,25 +95,22 @@ const Header = (props: IProps) => {
           </ul>
         </nav>
 
-        <div className="mr-6">
-          <Button
-            className="px-2.5! py-1.5! rounded-[10px]! bg-base-content text-base-100"
-            color="default"
-            variant="solid"
-          >
-            <Link href="/sign-in">Sign in</Link>
-          </Button>
+        <div className="mr-6 flex items-center">
           {/* SignedOut是在用户没有登录才显示 */}
-          {/* <SignedOut>
-            <SignInButton>
-              
-            </SignInButton>
-          </SignedOut> */}
+          <SignedOut>
+            <Button
+              className="px-2.5! py-1.5! rounded-[10px]! bg-base-content text-base-100"
+              color="default"
+              variant="solid"
+            >
+              <Link href="/sign-in">Sign in</Link>
+            </Button>
+          </SignedOut>
 
           {/* 登录后显示 */}
-          {/* <SignedIn>
+          <SignedIn>
             <UserButton />
-          </SignedIn> */}
+          </SignedIn>
         </div>
         <button
           className="cursor-pointer text-base-content"
@@ -138,12 +135,29 @@ const Header = (props: IProps) => {
             </span>
           </div>
 
+          {/* SignedOut是在用户没有登录才显示 */}
+          <SignedOut>
+            <Button
+              className="px-2.5! py-1.5! rounded-[10px]! bg-base-content text-base-100"
+              color="default"
+              variant="solid"
+            >
+              <Link href="/sign-in">Sign in</Link>
+            </Button>
+          </SignedOut>
+
+          {/* 登录后显示 */}
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+
           <button
             className="cursor-pointer text-base-content"
             onClick={handleChangeTheme}
           >
             <SunMoon />
           </button>
+
           <button
             className=" border border-base-300  cursor-pointer text-base-content w-10 h-10 flex items-center justify-center rounded-full hover:bg-base-300 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

@@ -137,7 +137,7 @@ export default function CarouselComponent({ className }: CarouselProps) {
           className="w-full"
         >
           <CarouselContent className="-ml-2">
-            {carouselData.map((item) => (
+            {carouselData.map((item, index) => (
               <CarouselItem
                 key={item.id}
                 className="pl-2 basis-[80%] md:basis-[24%]"
@@ -150,6 +150,9 @@ export default function CarouselComponent({ className }: CarouselProps) {
                       alt={item.title}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading={index < 2 ? "eager" : "lazy"}
+                      priority={index < 2}
+                      sizes="(max-width: 768px) 80vw, 24vw"
                     />
                   </div>
                   {/* 标题 */}
