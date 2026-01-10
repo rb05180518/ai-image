@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <>
       {/* 内容宽度 */}
-      <Header className="max-w-7xl sticky top-6 z-50 mx-auto" />
+      <Header className="max-w-7xl sticky top-6 z-50 mb-6 mx-auto" />
       {/* 内容 */}
       {children}
     </>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Upload, Input } from "antd";
 import type { UploadProps } from "antd";
 import { Plus } from "lucide-react";
@@ -33,7 +33,9 @@ interface Generate2Props {
   className?: string;
 }
 
-export default function Generate2({ className }: Generate2Props) {
+const Generate2 = ({ className }: Generate2Props) => {
+  console.log(3333);
+
   const [prompt, setPrompt] = useState("");
   const [isAuto, setIsAuto] = useState(true);
 
@@ -112,4 +114,6 @@ export default function Generate2({ className }: Generate2Props) {
       </div>
     </div>
   );
-}
+};
+
+export default memo(Generate2);

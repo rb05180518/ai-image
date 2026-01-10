@@ -1,6 +1,6 @@
 import { Masonry } from "antd";
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 
 const defaultImages = [
   "https://images.unsplash.com/photo-1510001618818-4b4e3d86bf0f",
@@ -13,9 +13,10 @@ const defaultImages = [
   "https://images.unsplash.com/photo-1528163186890-de9b86b54b51",
   "https://images.unsplash.com/photo-1727423304224-6d2fd99b864c",
   "https://images.unsplash.com/photo-1675090391405-432434e23595",
-].map((url) => ({
+].map((url, index) => ({
   img: url,
   id: Math.floor(10000 + Math.random() * 90000),
+  key: index % 2 === 0 ? "1" : "2",
 }));
 const images = [
   "https://images.unsplash.com/photo-1510001618818-4b4e3d86bf0f",
@@ -34,14 +35,21 @@ const images = [
   "https://images.unsplash.com/photo-1731901245099-20ac7f85dbaa",
   "https://images.unsplash.com/photo-1617694455303-59af55af7e58",
   "https://images.unsplash.com/photo-1709198165282-1dab551df890",
-].map((url) => ({
+].map((url, index) => ({
   img: url,
   id: Math.floor(10000 + Math.random() * 90000),
+  key: index % 2 === 0 ? "1" : "2",
 }));
 
-const App = () => {
+interface IProps {
+  activeKey: string;
+}
+
+const App = (props: IProps) => {
+  const { activeKey } = props;
+
   const [imageList, setImageList] =
-    useState<{ img: string; id: number }[]>(images);
+    useState<{ img: string; id: number; key: string }[]>(images);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -74,13 +82,15 @@ const App = () => {
   return (
     <div>
       <Masonry
-        className="mt-20 max-w-360 mx-auto"
+        className="mt-6 max-w-360 mx-auto"
         columns={{ xs: 2, sm: 2, md: 3, lg: 5 }}
         gutter={{ xs: 8, sm: 8, md: 8 }}
-        items={imageList.map((item, index) => ({
-          key: `${item.img}-${index}`,
-          data: item.img,
-        }))}
+        items={imageList
+          .filter((item) => item.key === activeKey)
+          .map((item, index) => ({
+            key: `${item.img}-${index}`,
+            data: item.img,
+          }))}
         itemRender={({ data }) => (
           <div className="relative cursor-pointer group rounded-lg overflow-hidden">
             <Image
