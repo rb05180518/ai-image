@@ -8,7 +8,7 @@ export default function ImageGeneratorPage() {
     <div className="w-full">
       <Masonry />
       {/* inset-x-0 mx-auto 定位元素中的水平居中 */}
-      <Generate2 className="fixed bottom-8 md:w-full w-[calc(100vw-16px)] inset-x-0 mx-auto md:max-w-6xl" />
+      <Generate2 className="fixed bottom-8 md:w-full w-[calc(100vw-16px)] inset-x-0 mx-auto md:max-w-5xl" />
     </div>
   );
 }

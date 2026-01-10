@@ -74,8 +74,8 @@ const App = () => {
   return (
     <div>
       <Masonry
-        className="mt-12 max-w-7xl mx-auto"
-        columns={{ xs: 2, sm: 2, md: 3, lg: 4 }}
+        className="mt-20 max-w-360 mx-auto"
+        columns={{ xs: 2, sm: 2, md: 3, lg: 5 }}
         gutter={{ xs: 8, sm: 8, md: 8 }}
         items={imageList.map((item, index) => ({
           key: `${item.img}-${index}`,
