@@ -1,36 +1,20 @@
 "use client";
 
-import BounceCards from "@/components/BounceCards/Index";
-import SplitText from "@/components/SplitText/Index";
-import Prompt from "./components/Prompt";
-import Carousel from "./components/Carousel";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 
-const images = [
-  "/home/1.jpeg",
-  "/home/2.png",
-  "/home/3.png",
-  "/home/4.png",
-  "/home/5.png",
-  "/home/2.png",
-  "/home/3.png",
-  "/home/4.png",
-  "/home/5.png",
-];
+import SplitText from "@/components/SplitText/Index";
+import Prompt from "./components/Prompt";
+import Carousel from "./components/Carousel";
 
-const transformStyles = [
-  "rotate(5deg) translate(-150px)",
-  "rotate(0deg) translate(-70px)",
-  "rotate(-5deg)",
-  "rotate(5deg) translate(70px)",
-  "rotate(-5deg) translate(150px)",
-];
+import { useSyncUser } from "@/hooks/index";
 
 export default function Home() {
   const [isShow, setIsShow] = useState(false);
+  useSyncUser();
+
   const handleAnimationComplete = () => {
-    console.log("All letters have animated!");
+    // console.log("All letters have animated!");
   };
 
   useEffect(() => {

@@ -1,19 +1,27 @@
 "use client";
 
+import { useEffect } from "react";
+
+import Autoplay from "embla-carousel-autoplay";
+import Fade from "embla-carousel-fade";
+import classNames from "classnames";
+
 import { useSignIn } from "@clerk/nextjs";
 import { Button, Input } from "antd";
-import Image from "next/image";
 import { Mail, KeyRound, Eye, EyeOff } from "lucide-react";
-import styles from "./styles.module.css";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation"; // app router 使用
+
+import { useUserInfo } from "@/hooks";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import Fade from "embla-carousel-fade";
-import classNames from "classnames";
-import Link from "next/link";
+
+import styles from "./styles.module.css";
 
 const { Password } = Input;
 
@@ -32,6 +40,8 @@ const carouselData: string[] = [
 const LoginRegister = (props: IProps) => {
   const { href, isShowPassword } = props;
   const { signIn } = useSignIn();
+  const { isLoaded, isSignedIn } = useUserInfo();
+  const router = useRouter();
 
   const providerButtons = [
     {
@@ -40,12 +50,18 @@ const LoginRegister = (props: IProps) => {
       onClick: () => {
         signIn?.authenticateWithRedirect({
           strategy: "oauth_google",
-          redirectUrl: "/sso-callback",
+          redirectUrl: "/sign-in-success",
           redirectUrlComplete: "/",
         });
       },
     },
   ];
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.push("/");
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   return (
     <div className="w-full h-full">
@@ -60,7 +76,7 @@ const LoginRegister = (props: IProps) => {
           />
 
           <h1 className="text-4xl mt-4 text-center font-semibold text-base-content">
-            Welcome to ImagineArt
+            Welcome to AI Image
           </h1>
 
           <div className="flex mt-12 flex-col gap-3">

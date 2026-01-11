@@ -3,17 +3,12 @@
 import { useState } from "react";
 import classNames from "classnames";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { SunMoon, Menu, X } from "lucide-react";
 import { Button } from "antd";
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 interface NavItem {
   label: string;
@@ -62,9 +57,16 @@ const Header = (props: IProps) => {
         )}
       >
         <div className="flex items-center gap-2">
-          <span className="text-lg font-semibold text-base-content">
-            🔵 YELLOW IMAGE
-          </span>
+          <div className="text-lg gap-x-2 font-semibold text-base-content flex items-center">
+            <Image
+              src="/logo/home.webp"
+              className="rounded-xs"
+              width={30}
+              height={30}
+              alt="logo"
+            />
+            <span>AI IMAGE</span>
+          </div>
         </div>
         <nav className="flex relative mx-auto">
           <ul className="flex gap-8 list-none p-0 px-4 m-0 relative">
@@ -130,8 +132,15 @@ const Header = (props: IProps) => {
         {/* 顶部栏 */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
+            <Image
+              src="/logo/home.webp"
+              className="rounded-xs"
+              width={30}
+              height={30}
+              alt="logo"
+            />
             <span className="text-lg font-semibold text-base-content">
-              🔵 YELLOW IMAGE
+              AI IMAGE
             </span>
           </div>
 

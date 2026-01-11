@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
+
 import Tab from "./components/Tab/Index";
 import Masonry from "./components/Masonry/Index";
 import Generate2 from "./components/Generate2/Index";
-import { useState } from "react";
 
 export default function ImageGeneratorPage() {
   const [activeKey, setActiveKey] = useState("1");

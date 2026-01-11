@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// 用户模型 - 与 Clerk 用户同步
+model User {
+  id            String   @id @default(uuid())
+  clerkId       String   @unique // Clerk 用户 ID
+  email         String   @unique
+  username      String?  // 用户名
+  firstName     String?  // 名字
+  lastName      String?  // 姓氏
+  imageUrl      String?  // 头像 URL
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("users")
+}
