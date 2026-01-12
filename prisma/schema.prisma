@@ -15,15 +15,41 @@ datasource db {
 
 // 用户模型 - 与 Clerk 用户同步
 model User {
-  id            String   @id @default(uuid())
-  clerkId       String   @unique // Clerk 用户 ID
-  email         String   @unique
-  username      String?  // 用户名
-  firstName     String?  // 名字
-  lastName      String?  // 姓氏
-  imageUrl      String?  // 头像 URL
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        BigInt   @id @default(autoincrement()) // 主键 ID，自增
+  clerkId   String   @unique // Clerk 用户 ID
+  email     String   @unique // 邮箱
+  username  String? // 用户名
+  firstName String? // 名字
+  lastName  String? // 姓氏
+  imageUrl  String? // 头像 URL
+  createdAt DateTime @default(now()) // 创建时间
+  updatedAt DateTime @updatedAt // 更新时间
+
+  // 关联用户的使用记录
+  usages Usage[]
 
   @@map("users")
+}
+
+// 使用记录模型 - 记录用户的任务使用情况
+model Usage {
+  id         BigInt    @id @default(autoincrement()) // 主键 ID，自增
+  userId     String    @map("user_id") // Clerk 用户 ID
+  taskType   String    @map("task_type") @db.VarChar(32) // 任务类型
+  taskUsed   Int       @map("task_used") // 消费的积分数量
+  taskId     String    @map("task_id") @db.VarChar(64) // 任务 ID
+  inputMeta  Json?     @map("input_meta") // 输入元数据
+  outputMeta Json?     @map("output_meta") // 输出元数据
+  completeAt DateTime? @map("complete_at") // 任务完成时间
+  showPublic Int       @default(1) @map("show_public") // 公开展示状态：1=公开，0=私有
+  createdAt  DateTime  @default(now()) @map("created_at") // 创建时间
+  updatedAt  DateTime  @updatedAt @map("updated_at") // 更新时间
+  deletedAt  DateTime? @map("deleted_at") // 软删除时间
+  liked      Int       @default(1) @db.TinyInt // 是否喜欢：1=是，0=否
+
+  // 关联用户（通过 clerkId）
+  user User @relation(fields: [userId], references: [clerkId])
+
+  @@index([userId])
+  @@map("usages")
 }

@@ -2,6 +2,14 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+// 将 BigInt 转换为字符串，解决 JSON 序列化问题
+function serializeUser(user: { id: bigint; [key: string]: unknown }) {
+  return {
+    ...user,
+    id: user.id.toString(),
+  };
+}
+
 export async function POST() {
   try {
     // 获取当前登录用户
@@ -31,7 +39,7 @@ export async function POST() {
 
       return NextResponse.json({
         success: true,
-        user: updatedUser,
+        user: serializeUser(updatedUser),
         message: "用户信息已更新",
       });
     } else {
@@ -49,7 +57,7 @@ export async function POST() {
 
       return NextResponse.json({
         success: true,
-        user: newUser,
+        user: serializeUser(newUser),
         message: "用户已创建",
       });
     }
