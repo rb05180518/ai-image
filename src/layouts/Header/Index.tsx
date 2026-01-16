@@ -115,7 +115,7 @@ const Header = (props: IProps) => {
           </SignedIn>
         </div>
         <button
-          className="cursor-pointer text-base-content"
+          className="btn cursor-pointer text-base-content"
           onClick={handleChangeTheme}
         >
           <SunMoon />
@@ -161,7 +161,7 @@ const Header = (props: IProps) => {
           </SignedIn>
 
           <button
-            className="cursor-pointer text-base-content"
+            className="btn cursor-pointer text-base-content"
             onClick={handleChangeTheme}
           >
             <SunMoon />

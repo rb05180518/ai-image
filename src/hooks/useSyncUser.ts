@@ -1,6 +1,17 @@
 // 同步用户信息到数据库
 import { useUserInfo } from "./index";
 import { useEffect, useRef } from "react";
+import { request } from "@/lib/request";
+
+interface IResponse {
+  success: boolean;
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+  };
+  error?: string;
+}
 
 const useSyncUser = () => {
   const { isLoaded, isSignedIn } = useUserInfo();
@@ -14,11 +25,8 @@ const useSyncUser = () => {
       const syncUser = async () => {
         try {
           console.log("开始同步用户到数据库...");
-          const response = await fetch("/api/sync-user", {
-            method: "POST",
-          });
 
-          const data = await response.json();
+          const data = await request.post<IResponse>("/api/sync-user");
 
           if (data.success) {
             console.log("✅ 用户同步成功:", data.user);

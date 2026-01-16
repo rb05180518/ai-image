@@ -37,7 +37,7 @@ model Usage {
   userId     String    @map("user_id") // Clerk 用户 ID
   taskType   String    @map("task_type") @db.VarChar(32) // 任务类型
   taskUsed   Int       @map("task_used") // 消费的积分数量
-  taskId     String    @map("task_id") @db.VarChar(64) // 任务 ID
+  taskId     String    @unique @map("task_id") @db.VarChar(64) // 任务 ID
   inputMeta  Json?     @map("input_meta") // 输入元数据
   outputMeta Json?     @map("output_meta") // 输出元数据
   completeAt DateTime? @map("complete_at") // 任务完成时间

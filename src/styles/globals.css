@@ -97,8 +97,13 @@
   * {
     /* @apply border-border outline-ring/50; */
     /* font-size: 40px; */
+    
   }
   body {
     /* @apply bg-background text-foreground; */
+  }
+
+  .btn {
+    @apply block active:scale-90 transition-transform duration-150 ease-out;
   }
 }

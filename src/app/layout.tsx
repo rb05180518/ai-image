@@ -37,7 +37,7 @@ export default function RootLayout({
           <ThemeProvider>
             {/* 解决ssr阶段样式闪烁 */}
             <AntdRegistry>
-              <SplashCursor />
+              {/* <SplashCursor /> */}
               {/* 内容宽度 */}
               <div className="p-4 md:p-0">
                 {/* 内容 */}

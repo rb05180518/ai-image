@@ -1,9 +1,12 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
+// 引入 worker 脚本以启动任务处理
+import "./lib/worker";
+
 // 定义需要登录才能访问的路由
 const isProtectedRoute = createRouteMatcher([
-  '/image-generator(.*)',
-  '/pricing(.*)',
+  "/image-generator(.*)",
+  "/pricing(.*)",
   // 添加其他需要保护的路由
 ]);
 
