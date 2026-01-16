@@ -1,9 +1,9 @@
 // Worker 脚本 - 处理图片生成任务
 // 运行方式: npx tsx src/worker.ts
 
-import type { ImageTaskData, ImageTaskResult } from "./lib/queue";
-import { createImageWorker } from "./lib/queue";
-import { request } from "./lib/request";
+import type { ImageTaskData, ImageTaskResult } from "./queue";
+import { createImageWorker } from "./queue";
+import { request } from "./request";
 import type { Job } from "bullmq";
 
 const API_KEY = "b3af86d3dff1d6a424398eb5c1eeeb85";
