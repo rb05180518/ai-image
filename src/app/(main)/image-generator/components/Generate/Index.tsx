@@ -416,7 +416,7 @@ const Generate = () => {
                   placeholder="Describe what you want to create..."
                   rows={1}
                   variant="borderless"
-                  className="text-base-content/90 placeholder:text-base-content/80! text-sm leading-relaxed p-0!"
+                  className="text-base-content/90! placeholder:text-base-content/80! text-sm leading-relaxed p-0!"
                 />
               </div>
 

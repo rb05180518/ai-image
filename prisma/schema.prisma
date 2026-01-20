@@ -51,5 +51,7 @@ model Usage {
   user User @relation(fields: [userId], references: [clerkId])
 
   @@index([userId])
+  @@index([userId, createdAt(sort: Desc)]) // 优化按用户ID和创建时间降序查询
+  @@index([completeAt]) // 优化按完成时间查询（用于筛选未完成任务）
   @@map("usages")
 }

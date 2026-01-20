@@ -1,42 +1,62 @@
-"use client";
-
-import { useState } from "react";
-
-import Masonry from "./components/Masonry/Index";
+import { currentUser } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
+import { getTaskStatus } from "@/lib/queue";
+import ImageGeneratorClient from "./components/ImageGeneratorClient";
 import Generate from "./components/Generate/Index";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const tabsOptions = [
-  { key: "1", label: "My Creations" },
-  { key: "2", label: "Explore Interesting Creations" },
-];
-
-export default function ImageGeneratorPage() {
-  const [activeKey, setActiveKey] = useState("1");
-
-  const handleTabChange = (key: string) => {
-    setActiveKey(key);
+// 将 BigInt 转换为字符串
+function serializeUsage(usage: { id: bigint; [key: string]: unknown }) {
+  return {
+    ...usage,
+    id: usage.id.toString(),
   };
+}
+
+async function getUsages() {
+  const user = await currentUser();
+  if (!user) {
+    return [];
+  }
+
+  // 从数据库获取用户的所有使用记录
+  const usages = await prisma.usage.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+  });
+
+  // 为每条记录附加队列状态
+  const usagesWithStatus = await Promise.all(
+    usages.map(async (usage) => {
+      const serialized = serializeUsage(usage);
+
+      // 如果任务还没完成，查询队列状态
+      if (!usage.completeAt) {
+        const queueStatus = await getTaskStatus(usage.taskId);
+        return {
+          ...serialized,
+          queueState: queueStatus?.state || "unknown",
+          progress: queueStatus?.progress || 0,
+        };
+      }
+
+      // 已完成的任务
+      return {
+        ...serialized,
+        queueState: "completed",
+        progress: 100,
+      };
+    })
+  );
+
+  return usagesWithStatus;
+}
+
+export default async function ImageGeneratorPage() {
+  const initialUsages = await getUsages();
 
   return (
-    <div className="w-full px-5">
-      <Tabs defaultValue="1" className="max-w-360 mt-18 mx-auto w-full">
-        <TabsList className="bg-base-200 h-full p-1.5 rounded-full">
-          {tabsOptions.map((item) => {
-            return (
-              <TabsTrigger
-                key={item.label}
-                value={item.key}
-                className="rounded-2xl data-[state=active]:bg-base-100 py-2 px-6"
-                onClick={() => handleTabChange(item.key)}
-              >
-                {item.label}
-              </TabsTrigger>
-            );
-          })}
-        </TabsList>
-      </Tabs>
-      <Masonry activeKey={activeKey} />
+    <div className="w-full md:px-5">
+      <ImageGeneratorClient initialUsages={initialUsages} />
       <Generate />
     </div>
   );

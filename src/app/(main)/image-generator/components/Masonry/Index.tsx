@@ -1,9 +1,29 @@
 import { Masonry } from "antd";
 import Image from "next/image";
-import { useRef, useEffect, useMemo } from "react";
-import useTaskStore from "@/store/useTaskStore";
+import { useRef, useMemo, useEffect } from "react";
 import type { IQueueState } from "@/store/useTaskStore";
 import classNames from "classnames";
+import useTaskStore from "@/store/useTaskStore";
+
+// 生成模糊占位图的 base64 SVG
+const shimmer = (w: number, h: number) => `
+<svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient id="g">
+      <stop stop-color="#f0f0f0" offset="20%" />
+      <stop stop-color="#e0e0e0" offset="50%" />
+      <stop stop-color="#f0f0f0" offset="70%" />
+    </linearGradient>
+  </defs>
+  <rect width="${w}" height="${h}" fill="#f0f0f0" />
+  <rect id="r" width="${w}" height="${h}" fill="url(#g)" />
+  <animate xlink:href="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
+</svg>`;
+
+const toBase64 = (str: string) =>
+  typeof window === "undefined"
+    ? Buffer.from(str).toString("base64")
+    : window.btoa(str);
 
 const exploreImages = [
   "https://images.unsplash.com/photo-1510001618818-4b4e3d86bf0f",
@@ -36,11 +56,13 @@ type SizeMapKey = keyof typeof sizeMap;
 
 interface IProps {
   activeKey: string;
+  usages: any[];
 }
 
 const App = (props: IProps) => {
-  const { activeKey } = props;
-  const { usages, fetchUsages, startPolling, stopPolling } = useTaskStore();
+  const { activeKey, usages } = props;
+
+  const { fetchUsages, startPolling, stopPolling } = useTaskStore();
 
   const bottomRef = useRef(null);
 
@@ -118,10 +140,10 @@ const App = (props: IProps) => {
   // }, [imageList]);
 
   return (
-    <div>
+    <>
       <Masonry
         fresh
-        className="mt-6 max-w-360 mx-auto"
+        className="mt-6 max-w-360 mx-auto min-h-screen"
         columns={{ xs: 2, sm: 2, md: 3, lg: 5 }}
         gutter={{ xs: 8, sm: 8, md: 8 }}
         items={imageList.map((item, index) => ({
@@ -132,14 +154,30 @@ const App = (props: IProps) => {
           <>
             {/* 完成态 */}
             {item.data.status === "completed" && (
-              <div className="relative cursor-pointer group rounded-lg overflow-hidden">
+              <div className="relative cursor-pointer group rounded-lg overflow-hidden bg-base-300">
                 {/* 动态导入的图片必须设置宽高和fill */}
                 <Image
                   width={200}
                   height={200}
                   src={`${item.data.url}?w=523&auto=format`}
                   alt="image"
-                  unoptimized
+                  loading="eager"
+                  quality={75}
+                  placeholder="blur"
+                  blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                    shimmer(200, 200)
+                  )}`}
+                  unoptimized={true}
+                  onError={(e) => {
+                    // 图片加载失败时，尝试加载原图
+                    const target = e.target as HTMLImageElement;
+                    if (!target.src.includes("&retry=1")) {
+                      target.src = `${item.data.url}?w=400&auto=format&retry=1`;
+                    } else if (!target.src.includes("&retry=2")) {
+                      // 第二次重试，加载更小的图片
+                      target.src = `${item.data.url}?w=300&retry=2`;
+                    }
+                  }}
                   style={{
                     width: "100%",
                   }}
@@ -177,7 +215,7 @@ const App = (props: IProps) => {
 
       {/* 底部标记元素 */}
       <div ref={bottomRef} className="h-4 w-full" />
-    </div>
+    </>
   );
 };
 

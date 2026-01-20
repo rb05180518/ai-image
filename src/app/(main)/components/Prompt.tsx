@@ -7,6 +7,7 @@ import type { LucideIcon } from "lucide-react";
 import useTaskStore from "@/store/useTaskStore";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRandom } from "@/hooks";
 
 const { TextArea } = Input;
 
@@ -38,17 +39,16 @@ const mediaOptions: MediaOption[] = [
 export const RandomPrompts = (props: {
   setPrompt: (prompt: string) => void;
 }) => {
-  const randomPrompts = [
+  const pickRandomPrompt = useRandom([
     "A futuristic city skyline at sunset",
     "A serene landscape with mountains and a river",
     "A close-up of a flower with dew drops",
     "A bustling market street in a foreign country",
     "A cozy cabin in the woods during winter",
-  ];
+  ]);
 
   const handleRandomPrompt = () => {
-    const randomPrompt =
-      randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
+    const randomPrompt = pickRandomPrompt();
     props.setPrompt(randomPrompt);
   };
 

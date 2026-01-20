@@ -11,6 +11,7 @@ import { useSyncUser } from "@/hooks/index";
 
 export default function Home() {
   const [isShow, setIsShow] = useState(false);
+
   useSyncUser();
 
   const handleAnimationComplete = () => {
