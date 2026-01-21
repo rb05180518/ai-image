@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import Header from "@/layouts/Header/Index";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,11 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <NotificationProvider>
       {/* 内容宽度 */}
       <Header className="max-w-7xl sticky top-6 z-50 mb-6 mx-auto" />
       {/* 内容 */}
       {children}
-    </>
+    </NotificationProvider>
   );
 }

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { request } from "@/lib/request";
+import { showTaskCompletedNotification } from "@/contexts/NotificationContext";
 
 export interface IParams {
   provider: string;
@@ -32,10 +33,12 @@ interface TaskStore {
   usages: Usage[];
   isPolling: boolean;
   pollingTimer: NodeJS.Timeout | null;
+  previousUsages: Map<string, IQueueState>; // 记录上一次的任务状态
   fetchUsages: () => Promise<void>;
   submitTask: (params: IParams) => Promise<string | null>;
   startPolling: () => void;
   stopPolling: () => void;
+  onTaskCompleted?: (taskId: string, usage: Usage) => void; // 任务完成回调
 }
 
 interface IUsagesResponse {
@@ -53,12 +56,38 @@ const useTaskStore = create<TaskStore>((set, get) => {
     usages: [],
     isPolling: false, // 是否在轮询
     pollingTimer: null, // 轮询的定时器
+    previousUsages: new Map<string, IQueueState>(), // 记录上一次的任务状态
 
     fetchUsages: async () => {
       const res = await request.get<IUsagesResponse>("/api/usages");
       if (res.success) {
+        const { previousUsages, onTaskCompleted } = get();
+
+        // 检测状态变化：从 active/waiting 变为 completed
+        res.usages.forEach((usage: Usage) => {
+          const previousState = previousUsages.get(usage.taskId);
+
+          // 只有当任务从 active 或 waiting 变为 completed 时才通知
+          if (
+            usage.queueState === "completed" &&
+            previousState &&
+            (previousState === "active" || previousState === "waiting")
+          ) {
+            // 直接调用通知函数
+            showTaskCompletedNotification();
+
+            // 触发回调（如果有的话）
+            if (onTaskCompleted) {
+              onTaskCompleted(usage.taskId, usage);
+            }
+          }
+
+          // 更新状态记录
+          previousUsages.set(usage.taskId, usage.queueState);
+        });
+
         // 更新usages
-        set({ usages: res.usages });
+        set({ usages: res.usages, previousUsages });
 
         // 自动停止轮询
         const hasActive = res.usages.some(
