@@ -35,7 +35,7 @@ export const providerKie = async <T>(
     processedParams,
     {
       headers: {
-        Authorization: `Bearer b3af86d3dff1d6a424398eb5c1eeeb85`,
+        Authorization: `Bearer ${API_KEY}`,
       },
     },
   );
@@ -46,7 +46,7 @@ export const providerKie = async <T>(
   };
 };
 
-export const getResult = async (taskId: string) => {
+export const getKieResult = async (taskId: string) => {
   const response = await request.get<IResultResponse>(
     `https://api.kie.ai/api/v1/jobs/recordInfo?taskId=${taskId}`,
     {
@@ -60,7 +60,10 @@ export const getResult = async (taskId: string) => {
   if (response.data?.state === "success") {
     // 任务完成，解析 resultJson 字符串获取图片 URL
     const resultJson = JSON.parse(response.data?.resultJson || "{}");
-    return resultJson.resultUrls[0];
+    return {
+      success: true,
+      url: resultJson.resultUrls[0],
+    };
   }
 
   if (response.data?.state === "failed" || response.data?.state === "error") {

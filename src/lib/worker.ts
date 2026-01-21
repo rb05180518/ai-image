@@ -4,7 +4,7 @@
 import type { ImageTaskData, ImageTaskResult } from "./queue";
 import { createImageWorker } from "./queue";
 import type { Job } from "bullmq";
-import { getResult } from "@/app/api/services/tools/providerModel/providerKie";
+import { getKieResult } from "@/app/api/services/tools/providerModel/providerKie";
 
 console.log("🚀 Worker 启动中...");
 
@@ -15,8 +15,11 @@ async function pollAITaskResult(taskId: string): Promise<string> {
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      await getResult(taskId);
-    } catch (err) {}
+      const res = await getKieResult(taskId);
+      if (res?.success) return res.url;
+    } catch (err) {
+      console.log(err);
+    }
 
     // 等待后继续轮询
     await new Promise((resolve) => setTimeout(resolve, interval));
