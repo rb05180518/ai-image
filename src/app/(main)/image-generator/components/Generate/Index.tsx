@@ -4,7 +4,7 @@ import { memo, useMemo, useState } from "react";
 import { Upload, Input } from "antd";
 import type { UploadProps } from "antd";
 import Image from "next/image";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Settings2, Send } from "lucide-react";
 import RotatingText from "@/components/RotatingText/Index";
 import useTaskStore from "@/store/useTaskStore";
 import type { IParams } from "@/store/useTaskStore";
@@ -101,10 +101,11 @@ const allModels = [
 type IModelOption = (typeof allModels)[number];
 
 export const ModelComponents = (props: {
+  className: string;
   isAutoRotating: boolean;
   params: IParams;
 }) => {
-  const { isAutoRotating, params } = props;
+  const { className, isAutoRotating, params } = props;
 
   const texts = useMemo(() => {
     const currentParams = Object.entries(params)
@@ -123,19 +124,21 @@ export const ModelComponents = (props: {
   }, [isAutoRotating, params]);
 
   return (
-    <RotatingText
-      texts={texts}
-      mainClassName="px-2 sm:px-2 md:px-3 bg-base-300/30 text-base-content/60 overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
-      staggerFrom={"last"}
-      initial={{ y: "100%" }}
-      animate={{ y: 0 }}
-      auto={isAutoRotating}
-      exit={{ y: "-120%" }}
-      staggerDuration={0.025}
-      splitLevelClassName="overflow-hidden"
-      transition={{ type: "spring", damping: 30, stiffness: 400 }}
-      rotationInterval={2000}
-    />
+    <div className={className}>
+      <RotatingText
+        texts={texts}
+        mainClassName="px-2 sm:px-2 md:px-3 bg-base-300/30 text-base-content/60 overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+        staggerFrom={"last"}
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        auto={isAutoRotating}
+        exit={{ y: "-120%" }}
+        staggerDuration={0.025}
+        splitLevelClassName="overflow-hidden"
+        transition={{ type: "spring", damping: 30, stiffness: 400 }}
+        rotationInterval={2000}
+      />
+    </div>
   );
 };
 
@@ -224,7 +227,7 @@ const Generate = () => {
   return (
     <>
       {/* inset-x-0 mx-auto 定位元素中的水平居中 */}
-      <div className="flex flex-col fixed bottom-8 md:w-full w-[calc(100vw-16px)] z-22 inset-x-0 mx-auto md:max-w-5xl rounded-2xl">
+      <div className="flex flex-col fixed bg-transparent bottom-8 md:w-full w-[calc(100vw-16px)] z-51 inset-x-0 mx-auto md:max-w-5xl rounded-2xl">
         {/* 参数选择 */}
         <AnimatePresence>
           {isShowModelSelect && (
@@ -266,7 +269,7 @@ const Generate = () => {
                               {
                                 "border-2 border-primary":
                                   currentModel.value === item.value,
-                              }
+                              },
                             )}
                           >
                             <Image
@@ -380,7 +383,7 @@ const Generate = () => {
         </AnimatePresence>
 
         {/* 生成框 */}
-        <div className="flex bg-base-100 items-normal rounded-2xl">
+        <div className="flex shadow-xs border border-base-300 bg-base-100 items-normal rounded-2xl">
           {/* 左侧：添加图片区域 */}
           <div className="flex flex-col p-3 gap-3">
             {/* 添加图片按钮 - 大正方形 */}
@@ -414,7 +417,7 @@ const Generate = () => {
                     setParams((prev) => ({ ...prev, prompt: e.target.value }))
                   }
                   placeholder="Describe what you want to create..."
-                  rows={1}
+                  rows={3}
                   variant="borderless"
                   className="text-base-content/90! placeholder:text-base-content/80! text-sm leading-relaxed p-0!"
                 />
@@ -430,26 +433,31 @@ const Generate = () => {
                     onClick={handleModelOpen}
                   >
                     <ModelComponents
+                      className="hidden md:block"
                       isAutoRotating={isAutoRotating}
                       params={params}
                     />
+                    <Settings2 className="block md:hidden" />
                   </div>
                 </div>
 
                 <button
                   disabled={isGenerating}
                   className={classNames(
-                    "w-30 h-12 flex items-center justify-center cursor-pointer touch-manipulation bg-primary hover:bg-primary/70 rounded-xl text-base-100 font-semibold text-lg transition-colors shadow-lg hover:shadow-xl",
+                    "md:w-30 w-15 h-12 flex items-center justify-center cursor-pointer touch-manipulation bg-primary hover:bg-primary/70 rounded-xl text-base-100 font-semibold text-lg transition-colors shadow-lg hover:shadow-xl",
                     {
                       "opacity-50 cursor-not-allowed!": isGenerating,
-                    }
+                    },
                   )}
                   onClick={handleSubmit}
                 >
                   {isGenerating ? (
                     <Spinner className="size-6" />
                   ) : (
-                    <span className="btn">Create</span>
+                    <>
+                      <span className="hidden md:block btn">Create</span>
+                      <Send className="block md:hidden" />
+                    </>
                   )}
                 </button>
               </div>

@@ -19,13 +19,13 @@ const Layout = (props: PropsWithChildren) => {
   }, []);
 
   return (
-    <div className="relative h-full md:h-screen md:bg-base-100 md:backdrop-blur-md">
+    <div className="relative h-full md:max-w-5xl md:mx-auto md:py-10 md:bg-base-100 md:backdrop-blur-md">
       <div className="h-full w-full flex flex-col gap-y-6 md:gap-y-12 justify-center items-center">
         <SplitText
           text="We’re about to explore more exciting AI images and videos."
           className={classNames(
             "text-2xl md:text-6xl font-bold text-base-content max-w-7xl block! mx-auto text-center overflow-visible!",
-            { "opacity-0": !isShow }
+            { "opacity-0": !isShow },
           )}
           delay={100}
           duration={0.1}
