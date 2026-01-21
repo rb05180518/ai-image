@@ -3,20 +3,10 @@
 
 import type { ImageTaskData, ImageTaskResult } from "./queue";
 import { createImageWorker } from "./queue";
-import { request } from "./request";
 import type { Job } from "bullmq";
-
-const API_KEY = "b3af86d3dff1d6a424398eb5c1eeeb85";
+import { getResult } from "@/app/api/services/tools/providerModel/providerKie";
 
 console.log("🚀 Worker 启动中...");
-
-interface IResponse {
-  data: {
-    state: "success" | "failed" | "error";
-    resultJson: string;
-    error: string;
-  };
-}
 
 // 轮询获取 AI 任务结果
 async function pollAITaskResult(taskId: string): Promise<string> {
@@ -24,25 +14,9 @@ async function pollAITaskResult(taskId: string): Promise<string> {
   const interval = 5000; // 每 2 秒查询一次
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    const response = await request.get<IResponse>(
-      `https://api.kie.ai/api/v1/jobs/recordInfo?taskId=${taskId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-        },
-      }
-    );
-
-    // 根据 AI API 返回的状态判断
-    if (response.data?.state === "success") {
-      // 任务完成，解析 resultJson 字符串获取图片 URL
-      const resultJson = JSON.parse(response.data?.resultJson || "{}");
-      return resultJson.resultUrls[0];
-    }
-
-    if (response.data?.state === "failed" || response.data?.state === "error") {
-      throw new Error(`AI 任务失败: ${response.data?.error || "未知错误"}`);
-    }
+    try {
+      await getResult(taskId);
+    } catch (err) {}
 
     // 等待后继续轮询
     await new Promise((resolve) => setTimeout(resolve, interval));
@@ -53,7 +27,7 @@ async function pollAITaskResult(taskId: string): Promise<string> {
 
 // 处理任务
 async function processImageTask(
-  job: Job<ImageTaskData>
+  job: Job<ImageTaskData>,
 ): Promise<ImageTaskResult> {
   const { taskId } = job.data;
 
