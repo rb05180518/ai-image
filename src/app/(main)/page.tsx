@@ -6,6 +6,7 @@ import classNames from "classnames";
 import SplitText from "@/components/SplitText/Index";
 import Prompt from "./components/Prompt";
 import Carousel from "./components/Carousel";
+import DetailImageType from "./components/DetailImageType";
 
 import { useSyncUser } from "@/hooks/index";
 
@@ -33,7 +34,7 @@ export default function Home() {
           text="We don't produce images, we simply deliver AI-generated art."
           className={classNames(
             "mt-12 md:mt-18 text-4xl md:text-6xl font-bold text-base-content max-w-7xl block! mx-auto text-center overflow-visible!",
-            { "opacity-0": !isShow }
+            { "opacity-0": !isShow },
           )}
           delay={100}
           duration={0.1}
@@ -61,6 +62,8 @@ export default function Home() {
           enableHover={true}
         /> */}
         <Carousel className="mt-12 md:mt-18" />
+
+        <DetailImageType />
       </div>
     </div>
   );
