@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import Header from "@/layouts/Header/Index";
+// import Header from "@/layouts/Header/Index";
+import Header from "@/layouts/Header02/Index";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 
 export const metadata: Metadata = {
@@ -16,7 +17,8 @@ export default function RootLayout({
   return (
     <NotificationProvider>
       {/* 内容宽度 */}
-      <Header className="max-w-7xl sticky top-6 z-50 mb-6 mx-auto" />
+      {/* <Header className="max-w-7xl sticky top-6 z-50 mb-6 mx-auto" /> */}
+      <Header className="sticky top-0 z-50" />
       {/* 内容 */}
       {children}
     </NotificationProvider>

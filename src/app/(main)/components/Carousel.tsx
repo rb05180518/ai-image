@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Autoplay from "embla-carousel-autoplay";
 
 import {
   Carousel,
@@ -98,12 +99,12 @@ export default function CarouselComponent({ className }: CarouselProps) {
   return (
     <div className={`w-full ${className}`}>
       {/* 标题 */}
-      <h2 className="text-xl font-medium text-base-content ">
+      <h2 className="text-4xl text-center font-bold text-base-content">
         What&apos;s new
       </h2>
 
       {/* 轮播图容器 */}
-      <div className="relative mt-4">
+      <div className="relative mt-16">
         {/* 左箭头按钮 - 仅桌面端显示 */}
         {canScrollPrev && (
           <button
@@ -131,9 +132,15 @@ export default function CarouselComponent({ className }: CarouselProps) {
           setApi={setApi}
           opts={{
             align: "start",
-            loop: false,
+            loop: true,
             slidesToScroll: 1,
           }}
+          plugins={[
+            Autoplay({
+              delay: 3000,
+              stopOnInteraction: false,
+            }),
+          ]}
           className="w-full"
         >
           <CarouselContent className="-ml-2">

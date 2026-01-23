@@ -1,19 +1,113 @@
 import ScrollStack, { ScrollStackItem } from "@/components/ui/ScrollStack";
+import Image from "next/image";
 
 const DetailImageType = () => {
   return (
-    <ScrollStack>
+    <ScrollStack useWindowScroll={true} itemDistance={50}>
       <ScrollStackItem>
-        <h2>Card 1</h2>
-        <p>This is the first card in the stack</p>
+        <div className="flex justify-between items-center">
+          <div>
+            <p>Video to Video AI</p>
+
+            <p>
+              Transform your videos into 30+ creative animation styles, such as
+              Japanese anime, Disney Pixar, claymation, painting and more.
+            </p>
+            <div>Try for Free</div>
+          </div>
+          <div>
+            <Image
+              width={400}
+              height={300}
+              src="/home/1.jpeg"
+              alt="Video to Video AI"
+            />
+          </div>
+        </div>
       </ScrollStackItem>
       <ScrollStackItem>
-        <h2>Card 2</h2>
-        <p>This is the second card in the stack</p>
+        <div className="flex flex-row-reverse justify-between items-center">
+          <div>
+            <p>Video to Video AI</p>
+
+            <p>
+              Transform your videos into 30+ creative animation styles, such as
+              Japanese anime, Disney Pixar, claymation, painting and more.
+            </p>
+            <div>Try for Free</div>
+          </div>
+          <div>
+            <Image
+              width={400}
+              height={300}
+              src="/home/1.jpeg"
+              alt="Video to Video AI"
+            />
+          </div>
+        </div>
       </ScrollStackItem>
       <ScrollStackItem>
-        <h2>Card 3</h2>
-        <p>This is the third card in the stack</p>
+        <div className="flex justify-between items-center">
+          <div>
+            <p>Video to Video AI</p>
+
+            <p>
+              Transform your videos into 30+ creative animation styles, such as
+              Japanese anime, Disney Pixar, claymation, painting and more.
+            </p>
+            <div>Try for Free</div>
+          </div>
+          <div>
+            <Image
+              width={400}
+              height={300}
+              src="/home/1.jpeg"
+              alt="Video to Video AI"
+            />
+          </div>
+        </div>
+      </ScrollStackItem>
+      <ScrollStackItem>
+        <div className="flex justify-between items-center">
+          <div>
+            <p>Video to Video AI</p>
+
+            <p>
+              Transform your videos into 30+ creative animation styles, such as
+              Japanese anime, Disney Pixar, claymation, painting and more.
+            </p>
+            <div>Try for Free</div>
+          </div>
+          <div>
+            <Image
+              width={400}
+              height={300}
+              src="/home/1.jpeg"
+              alt="Video to Video AI"
+            />
+          </div>
+        </div>
+      </ScrollStackItem>
+      <ScrollStackItem>
+        <div className="flex justify-between items-center">
+          <div>
+            <p>Video to Video AI</p>
+
+            <p>
+              Transform your videos into 30+ creative animation styles, such as
+              Japanese anime, Disney Pixar, claymation, painting and more.
+            </p>
+            <div>Try for Free</div>
+          </div>
+          <div>
+            <Image
+              width={400}
+              height={300}
+              src="/home/1.jpeg"
+              alt="Video to Video AI"
+            />
+          </div>
+        </div>
       </ScrollStackItem>
     </ScrollStack>
   );

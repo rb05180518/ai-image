@@ -39,7 +39,7 @@ export default function RootLayout({
             <AntdRegistry>
               {/* <SplashCursor /> */}
               {/* 内容宽度 */}
-              <div className="p-4 md:p-0">
+              <div className="p-0">
                 {/* 内容 */}
                 <main>{children}</main>
               </div>
