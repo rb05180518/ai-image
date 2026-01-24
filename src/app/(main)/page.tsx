@@ -72,6 +72,8 @@ export default function Home() {
       <Carousel className="mt-12 md:mt-18" />
 
       <DetailImageType />
+
+      <div className="h-[500px]"></div>
     </div>
   );
 }

@@ -7,25 +7,43 @@ const items = [
     title: "Video to Video AI",
     description:
       "Transform your videos into 30+ creative animation styles, such as Japanese anime, Disney Pixar, claymation, painting and more.",
-    image: "/home/1.jpeg",
+    media: "/home/1.jpeg",
+    type: "image" as const,
+  },
+  {
+    title: "AI Video Generation",
+    description:
+      "Create stunning videos from scratch using AI. Generate dynamic content with smooth transitions and professional quality.",
+    media: "/home/video/video1.mp4",
+    type: "video" as const,
   },
   {
     title: "Image to Image AI",
     description:
       "Convert your images into stunning artwork with various artistic styles, from oil painting to watercolor and digital art.",
-    image: "/home/2.png",
+    media: "/home/2.png",
+    type: "image" as const,
+  },
+  {
+    title: "AI Motion Effects",
+    description:
+      "Add cinematic motion effects to your content. Create eye-catching animations with AI-powered tools.",
+    media: "/home/video/video2.mp4",
+    type: "video" as const,
   },
   {
     title: "Text to Image AI",
     description:
       "Generate beautiful images from text descriptions using advanced AI models. Create anything you can imagine.",
-    image: "/home/3.png",
+    media: "/home/3.png",
+    type: "image" as const,
   },
   {
     title: "AI Photo Enhancement",
     description:
       "Enhance your photos with AI-powered tools. Upscale resolution, remove backgrounds, and improve quality instantly.",
-    image: "/home/4.png",
+    media: "/home/4.png",
+    type: "image" as const,
   },
 ];
 
@@ -61,13 +79,24 @@ const DetailImageType = () => {
             </Link>
           </div>
           <div className="md:w-1/2 h-full">
-            <Image
-              width={400}
-              height={400}
-              className="w-full h-full rounded-2xl object-cover"
-              src={item.image}
-              alt={item.title}
-            />
+            {item.type === "video" ? (
+              <video
+                className="w-full h-full rounded-2xl object-cover"
+                src={item.media}
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            ) : (
+              <Image
+                width={400}
+                height={400}
+                className="w-full h-full rounded-2xl object-cover"
+                src={item.media}
+                alt={item.title}
+              />
+            )}
           </div>
         </ScrollStackItem>
       ))}

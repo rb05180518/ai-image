@@ -41,13 +41,13 @@ interface ScrollStackProps {
 const ScrollStack: React.FC<ScrollStackProps> = ({
   children,
   className = "",
-  itemDistance = 100,
+  itemDistance = 0,
   itemScale = 0.03,
   itemStackDistance = 30,
-  stackPosition = "20%",
-  scaleEndPosition = "10%",
+  stackPosition = "10%",
+  scaleEndPosition = "1%",
   baseScale = 0.85,
-  scaleDuration = 0.5,
+  scaleDuration = 1,
   rotationAmount = 0,
   blurAmount = 0,
   useWindowScroll = false,
@@ -337,20 +337,20 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
   return (
     <div
-      className={`relative w-full h-full overflow-y-auto overflow-x-visible ${className}`.trim()}
+      className={`relative w-full ${useWindowScroll ? "" : "h-full overflow-y-auto"} overflow-x-visible ${className}`.trim()}
       ref={scrollerRef}
       style={{
-        overscrollBehavior: "contain",
-        WebkitOverflowScrolling: "touch",
+        overscrollBehavior: useWindowScroll ? undefined : "contain",
+        WebkitOverflowScrolling: useWindowScroll ? undefined : "touch",
         WebkitTransform: "translateZ(0)",
         transform: "translateZ(0)",
-        willChange: "scroll-position",
+        willChange: useWindowScroll ? undefined : "scroll-position",
       }}
     >
       <div className="scroll-stack-inner md:px-6 min-h-screen">
         {children}
         {/* Spacer so the last pin can release cleanly */}
-        <div className="scroll-stack-end w-full h-px" />
+        <div className="scroll-stack-end w-full h-[50vh]" />
       </div>
     </div>
   );
