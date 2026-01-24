@@ -7,7 +7,7 @@ import useTaskStore from "@/store/useTaskStore";
 
 const tabsOptions = [
   { key: "1", label: "My Creations" },
-  { key: "2", label: "Explore Interesting Creations" },
+  { key: "2", label: "Explore Creations" },
 ];
 
 interface IProps {

@@ -45,7 +45,7 @@ async function getUsages() {
         queueState: "completed",
         progress: 100,
       };
-    })
+    }),
   );
 
   return usagesWithStatus;
@@ -55,7 +55,7 @@ export default async function ImageGeneratorPage() {
   const initialUsages = await getUsages();
 
   return (
-    <div className="w-full md:px-5">
+    <div className="w-full md:px-5 px-4">
       <ImageGeneratorClient initialUsages={initialUsages} />
       <Generate />
     </div>
