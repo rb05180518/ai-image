@@ -31,6 +31,25 @@ model User {
   @@map("users")
 }
 
+// 订阅模型 - 记录用户的订阅信息
+model Subscription {
+  id                 BigInt    @id @default(autoincrement())
+  userId             String    @unique @map("user_id") // Clerk 用户 ID
+  creemCustomerId    String?   @map("creem_customer_id") // Creem 客户 ID
+  creemSubscriptionId String?  @map("creem_subscription_id") // Creem 订阅 ID
+  productId          String?   @map("product_id") // 产品 ID
+  status             String    @default("inactive") @db.VarChar(32) // 订阅状态
+  credits            Int       @default(0) // 剩余积分
+  currentPeriodStart DateTime? @map("current_period_start")
+  currentPeriodEnd   DateTime? @map("current_period_end")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  @@index([creemCustomerId])
+  @@index([creemSubscriptionId])
+  @@map("subscriptions")
+}
+
 // 使用记录模型 - 记录用户的任务使用情况
 model Usage {
   id         BigInt    @id @default(autoincrement()) // 主键 ID，自增
