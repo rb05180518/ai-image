@@ -9,6 +9,7 @@ import { useTheme } from "next-themes";
 import { SunMoon, Menu, X } from "lucide-react";
 import { Button } from "antd";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { useUserInfo } from "@/hooks";
 
 interface NavItem {
   label: string;
@@ -25,6 +26,8 @@ export interface IProps {
 const Header = (props: IProps) => {
   const pathname = usePathname() as TabType;
   const { theme, setTheme } = useTheme();
+
+  const { credits } = useUserInfo();
 
   const {
     className = "",
@@ -118,6 +121,8 @@ const Header = (props: IProps) => {
             <UserButton />
           </SignedIn>
         </div>
+
+        {credits}
         <button
           className="btn cursor-pointer text-base-content"
           onClick={handleChangeTheme}

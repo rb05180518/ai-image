@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { PRODUCTS, type ProductKey } from "@/lib/creem";
+import { useUser } from "@clerk/nextjs";
 
 const plans = [
   {
@@ -36,13 +37,15 @@ const Pricing = () => {
 
 function PricingCard({ plan }: { plan: (typeof plans)[0] }) {
   const [loading, setLoading] = useState(false);
+  const { user } = useUser();
   const product = PRODUCTS[plan.key];
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
+    if (!user?.id) return;
     setLoading(true);
     const params = new URLSearchParams({
       productId: product.id,
-      metadata: JSON.stringify({ credits: product.credits.toString() }),
+      referenceId: user.id,
     });
     window.location.href = `/api/checkout?${params.toString()}`;
   };
@@ -78,7 +81,7 @@ function PricingCard({ plan }: { plan: (typeof plans)[0] }) {
 
       <button
         onClick={handleCheckout}
-        disabled={loading}
+        disabled={loading || !user}
         className={`w-full py-3 rounded-xl font-semibold transition-colors cursor-pointer ${
           plan.popular
             ? "bg-primary text-primary-content hover:bg-primary/90"
