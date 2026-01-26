@@ -8,8 +8,9 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { SunMoon, Menu, X } from "lucide-react";
 import { Button } from "antd";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { useUserInfo } from "@/hooks";
+import UserInfo from "./components/UserInfo/Index";
 
 interface NavItem {
   label: string;
@@ -108,7 +109,7 @@ const Header = (props: IProps) => {
           {/* SignedOut是在用户没有登录才显示 */}
           <SignedOut>
             <Button
-              className="px-2.5! py-1.5! rounded-[10px]! bg-base-content text-base-100"
+              className="px-2.5! py-1.5! rounded-[10px]! text-base-100"
               color="default"
               variant="solid"
             >
@@ -118,11 +119,10 @@ const Header = (props: IProps) => {
 
           {/* 登录后显示 */}
           <SignedIn>
-            <UserButton />
+            <UserInfo />
           </SignedIn>
         </div>
 
-        {credits}
         <button
           className="btn cursor-pointer text-base-content"
           onClick={handleChangeTheme}
@@ -143,49 +143,46 @@ const Header = (props: IProps) => {
       >
         {/* 顶部栏 */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/logo/home.webp"
-              className="rounded-xs"
-              width={30}
-              height={30}
-              alt="logo"
-            />
+          {/* 左侧 */}
+          <div className="flex items-center gap-x-3">
+            <button
+              className=" border border-base-300  cursor-pointer text-base-content w-8 h-8 flex items-center justify-center rounded-full hover:bg-base-300 transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? <X size={16} /> : <Menu size={16} />}
+            </button>
+
             <span className="text-lg font-semibold text-base-content">
               AI IMAGE
             </span>
           </div>
 
-          {/* SignedOut是在用户没有登录才显示 */}
-          <SignedOut>
-            <Button
-              className="px-2.5! py-1.5! rounded-[10px]! bg-base-content text-base-100"
-              color="default"
-              variant="solid"
+          {/* 右侧 */}
+          <div className="flex items-center gap-x-3">
+            <button
+              className="btn cursor-pointer text-base-content"
+              onClick={handleChangeTheme}
             >
-              <Link href="/sign-in">Sign in</Link>
-            </Button>
-          </SignedOut>
+              <SunMoon className="w-6 -mt-1 h-6" />
+            </button>
 
-          {/* 登录后显示 */}
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+            {/* SignedOut是在用户没有登录才显示 */}
+            <SignedOut>
+              <Button
+                className="px-2.5! py-1.5! rounded-[10px]! bg-base-content text-base-100"
+                color="default"
+                variant="solid"
+              >
+                <Link href="/sign-in">Sign in</Link>
+              </Button>
+            </SignedOut>
 
-          <button
-            className="btn cursor-pointer text-base-content"
-            onClick={handleChangeTheme}
-          >
-            <SunMoon />
-          </button>
-
-          <button
-            className=" border border-base-300  cursor-pointer text-base-content w-10 h-10 flex items-center justify-center rounded-full hover:bg-base-300 transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Menu"
-          >
-            {mobileMenuOpen ? <X size={16} /> : <Menu size={16} />}
-          </button>
+            {/* 登录后显示 */}
+            <SignedIn>
+              <UserInfo />
+            </SignedIn>
+          </div>
         </div>
 
         {/* 展开的导航项 */}

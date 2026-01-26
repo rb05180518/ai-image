@@ -8,7 +8,7 @@
 /* inline为了能在className中，例如：text-primary使用 */
 @theme inline {
   /* --color告诉tailwindcss这是颜色 */
-  --color-base-100: var(--base-100); 
+  --color-base-100: var(--base-100);
   --color-base-200: var(--base-200);
   --color-base-300: var(--base-300);
   --color-base-content: var(--base-content);
@@ -57,11 +57,16 @@
 
 
   /* 导航粒子颜色 */
-  --color-1: #00ffff;  /* 青色霓虹 - Cyan Neon */
-  --color-2: #ff00ff;  /* 洋红霓虹 - Magenta Neon */
-  --color-3: #7c3aed;  /* 紫色 - Purple */
-  --color-4: #fbbf24;  /* 金色 - Gold */
-  --color-13: #10b981; /* 翠绿 - Emerald */
+  --color-1: #00ffff;
+  /* 青色霓虹 - Cyan Neon */
+  --color-2: #ff00ff;
+  /* 洋红霓虹 - Magenta Neon */
+  --color-3: #7c3aed;
+  /* 紫色 - Purple */
+  --color-4: #fbbf24;
+  /* 金色 - Gold */
+  --color-13: #10b981;
+  /* 翠绿 - Emerald */
 }
 
 :root[data-theme='dark'] {
@@ -93,17 +98,19 @@
 
 
 @layer base {
+
   /* 通配符设置样式 */
   * {
     /* @apply border-border outline-ring/50; */
     /* font-size: 40px; */
-    
+
   }
+
   body {
     /* @apply bg-background text-foreground; */
   }
 
   .btn {
-    @apply block active:scale-90 transition-transform duration-150 ease-out;
+    @apply block active:scale-90 transition-transform duration-150 ease-out cursor-pointer;
   }
 }
