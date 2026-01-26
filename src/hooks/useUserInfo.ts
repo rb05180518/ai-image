@@ -11,6 +11,7 @@ const useUserInfo = () => {
 
   const { data, error, isLoading, mutate } = useSWR<CreditsResponse>(
     isSignedIn ? "/api/credits" : null,
+    // 第一个参数的值会传到这里的url
     (url: string) => request.get<CreditsResponse>(url),
   );
 
