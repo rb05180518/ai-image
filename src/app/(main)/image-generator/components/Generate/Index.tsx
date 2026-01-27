@@ -15,6 +15,7 @@ import { Spinner } from "@/components/ui/spinner";
 import classNames from "classnames";
 import { RandomPrompts } from "@/app/(main)/components/Prompt";
 import { type ModelConfig, allModels } from "@/config/model";
+import { useUserInfo } from "@/hooks";
 
 const { TextArea } = Input;
 
@@ -85,6 +86,7 @@ export const ModelComponents = (props: {
 
 const Generate = () => {
   const { submitTask } = useTaskStore();
+  const { refreshCredits } = useUserInfo();
 
   const [isAutoRotating, setIsAutoRotating] = useState(true);
   const [isShowModelSelect, setIsShowModelSelect] = useState(false);
@@ -147,6 +149,8 @@ const Generate = () => {
       setIsGenerating(true);
       await submitTask(params);
 
+      // 刷新用户积分
+      refreshCredits();
       // 重置为当前模型的默认参数
       setIsShowModelSelect(false);
       setParams(getDefaultParams(currentModel));
@@ -304,7 +308,7 @@ const Generate = () => {
                   placeholder="Describe what you want to create..."
                   rows={3}
                   variant="borderless"
-                  className="text-base-content/90! placeholder:text-base-content/80! text-sm leading-relaxed p-0!"
+                  className="text-base-content/90! placeholder:text-base-content/20! text-sm leading-relaxed p-0!"
                 />
               </div>
 
@@ -340,10 +344,11 @@ const Generate = () => {
                   {isGenerating ? (
                     <Spinner className="size-6" />
                   ) : (
-                    <>
+                    <div className="flex items-center gap-x-2">
+                      <span>{currentModel.credits}</span>
                       <span className="hidden md:block btn">Create</span>
                       <Send className="block md:hidden btn" />
-                    </>
+                    </div>
                   )}
                 </button>
               </div>

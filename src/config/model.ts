@@ -17,6 +17,7 @@ interface ModelConfig {
   label: string;
   value: string;
   image: string;
+  credits: number;
   params: ModelParamConfig[];
 }
 
@@ -27,6 +28,7 @@ const allModels: ModelConfig[] = [
     label: "Nano Banana",
     value: "nano-banana",
     image: "/google.svg",
+    credits: 10,
     params: [
       {
         key: "aspectRatio",
@@ -53,6 +55,7 @@ const allModels: ModelConfig[] = [
     label: "Nano Banana Pro",
     value: "nano-banana-pro",
     image: "/google.svg",
+    credits: 20,
     params: [
       {
         key: "aspectRatio",

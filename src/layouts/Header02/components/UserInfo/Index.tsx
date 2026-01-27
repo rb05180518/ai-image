@@ -41,6 +41,7 @@ const UserInfo = () => {
             <Image
               src={avatarUrl}
               alt={displayName}
+              unoptimized
               width={36}
               height={36}
               className="w-full h-full object-cover"
@@ -60,6 +61,7 @@ const UserInfo = () => {
               <Image
                 src={avatarUrl}
                 alt={displayName}
+                unoptimized
                 width={48}
                 height={48}
                 className="w-full h-full object-cover"

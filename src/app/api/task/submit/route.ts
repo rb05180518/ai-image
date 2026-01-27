@@ -5,6 +5,33 @@ import { addImageTask } from "@/lib/queue";
 import { prisma } from "@/lib/prisma";
 import type { IParams } from "@/store/useTaskStore";
 import { executeProvider } from "../../services/tools/providerModel";
+import { allModels } from "@/config/model";
+
+// 积分扣除
+const decreaseCredits = async (userId: string, body: IParams) => {
+  const modelConfig = allModels.find((item) => item.value === body.model);
+  const cost = modelConfig!.credits;
+
+  // 从 User 表读取剩余积分
+  const user = await prisma.user.findUnique({
+    where: { clerkId: userId },
+    select: { totalCredits: true, usedCredits: true },
+  });
+
+  const remainingCredits = (user?.totalCredits ?? 0) - (user?.usedCredits ?? 0);
+
+  if (remainingCredits < cost) {
+    throw new Error("积分不足");
+  }
+
+  // 更新已用积分
+  await prisma.user.update({
+    where: { clerkId: userId },
+    data: { usedCredits: { increment: cost } },
+  });
+
+  return cost;
+};
 
 export async function POST(req: Request) {
   try {
@@ -14,6 +41,9 @@ export async function POST(req: Request) {
     }
 
     const body = (await req.json()) as IParams;
+
+    // 先扣积分后提交
+    await decreaseCredits(user.id, body);
 
     const { submitTaskId, params } = await executeProvider(body.provider, body);
 

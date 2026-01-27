@@ -9,12 +9,18 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const subscription = await prisma.subscription.findUnique({
-    where: { userId },
-    select: { credits: true },
+  const user = await prisma.user.findUnique({
+    where: { clerkId: userId },
+    select: { totalCredits: true, usedCredits: true, hasPurchased: true },
   });
 
+  const totalCredits = user?.totalCredits ?? 0;
+  const usedCredits = user?.usedCredits ?? 0;
+
   return NextResponse.json({
-    credits: subscription?.credits ?? 0,
+    totalCredits,
+    usedCredits,
+    credits: totalCredits - usedCredits,
+    hasPurchased: user?.hasPurchased ?? false,
   });
 }

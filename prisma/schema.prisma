@@ -15,36 +15,47 @@ datasource db {
 
 // 用户模型 - 与 Clerk 用户同步
 model User {
-  id        BigInt   @id @default(autoincrement()) // 主键 ID，自增
-  clerkId   String   @unique // Clerk 用户 ID
-  email     String   @unique // 邮箱
-  username  String? // 用户名
-  firstName String? // 名字
-  lastName  String? // 姓氏
-  imageUrl  String? // 头像 URL
-  createdAt DateTime @default(now()) // 创建时间
-  updatedAt DateTime @updatedAt // 更新时间
+  id            BigInt   @id @default(autoincrement()) // 主键 ID，自增
+  clerkId       String   @unique // Clerk 用户 ID
+  email         String   @unique // 邮箱
+  username      String? // 用户名
+  firstName     String? // 名字
+  lastName      String? // 姓氏
+  imageUrl      String? // 头像 URL
+  totalCredits  Int      @default(0) @map("total_credits") // 总积分
+  usedCredits   Int      @default(0) @map("used_credits") // 已用积分
+  hasPurchased  Boolean  @default(false) @map("has_purchased") // 是否购买过
+  createdAt     DateTime @default(now()) // 创建时间
+  updatedAt     DateTime @updatedAt // 更新时间
 
-  // 关联用户的使用记录
-  usages Usage[]
+  // 关联
+  usages        Usage[]
+  subscriptions Subscription[]
 
   @@map("users")
 }
 
-// 订阅模型 - 记录用户的订阅信息
+// 交易记录模型 - 记录用户的支付交易（一个用户可以有多条）
 model Subscription {
-  id                 BigInt    @id @default(autoincrement())
-  userId             String    @unique @map("user_id") // Clerk 用户 ID
-  creemCustomerId    String?   @map("creem_customer_id") // Creem 客户 ID
-  creemSubscriptionId String?  @map("creem_subscription_id") // Creem 订阅 ID
-  productId          String?   @map("product_id") // 产品 ID
-  status             String    @default("inactive") @db.VarChar(32) // 订阅状态
-  credits            Int       @default(0) // 剩余积分
-  currentPeriodStart DateTime? @map("current_period_start")
-  currentPeriodEnd   DateTime? @map("current_period_end")
-  createdAt          DateTime  @default(now()) @map("created_at")
-  updatedAt          DateTime  @updatedAt @map("updated_at")
+  id                  BigInt    @id @default(autoincrement())
+  userId              String    @map("user_id") // Clerk 用户 ID
+  checkoutId          String?   @unique @map("checkout_id") // Creem checkout ID
+  creemCustomerId     String?   @map("creem_customer_id") // Creem 客户 ID
+  creemSubscriptionId String?   @map("creem_subscription_id") // Creem 订阅 ID
+  productId           String?   @map("product_id") // 产品 ID
+  amount              Int       @default(0) // 金额（分）
+  currency            String    @default("USD") @db.VarChar(8) // 货币
+  credits             Int       @default(0) // 购买的积分数量
+  status              String    @default("pending") @db.VarChar(32) // pending, completed, failed, refunded
+  paidAt              DateTime? @map("paid_at") // 支付时间
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
 
+  // 关联用户
+  user User @relation(fields: [userId], references: [clerkId])
+
+  @@index([userId])
+  @@index([status])
   @@index([creemCustomerId])
   @@index([creemSubscriptionId])
   @@map("subscriptions")
