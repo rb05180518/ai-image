@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { SunMoon, Menu, X } from "lucide-react";
+import { Moon, Sun, Menu, X } from "lucide-react";
 import { Button } from "antd";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { useUserInfo } from "@/hooks";
@@ -34,7 +34,7 @@ const Header = (props: IProps) => {
     className = "",
     items = [
       { label: "Home", href: "/" },
-      { label: "Image Generator", href: "/image-generator" },
+      { label: "Image Generator", href: "/generator/image" },
       { label: "Pricing", href: "/pricing" },
     ],
   } = props;
@@ -76,13 +76,13 @@ const Header = (props: IProps) => {
       >
         <div className="flex items-center gap-2">
           <div className="text-lg gap-x-2 font-semibold text-base-content flex items-center">
-            <Image
+            {/* <Image
               src="/logo/home.webp"
               className="rounded-full"
               width={30}
               height={30}
               alt="logo"
-            />
+            /> */}
             <span>AI IMAGE</span>
           </div>
         </div>
@@ -105,7 +105,14 @@ const Header = (props: IProps) => {
           </ul>
         </nav>
 
-        <div className="mr-6 flex items-center">
+        <button
+          className="btn mr-6 cursor-pointer text-base-content"
+          onClick={handleChangeTheme}
+        >
+          {theme === "light" ? <Sun></Sun> : <Moon></Moon>}
+        </button>
+
+        <div className="flex items-center">
           {/* SignedOut是在用户没有登录才显示 */}
           <SignedOut>
             <Button
@@ -122,13 +129,6 @@ const Header = (props: IProps) => {
             <UserInfo />
           </SignedIn>
         </div>
-
-        <button
-          className="btn cursor-pointer text-base-content"
-          onClick={handleChangeTheme}
-        >
-          <SunMoon />
-        </button>
       </div>
 
       {/* 移动端导航栏 */}
@@ -164,7 +164,7 @@ const Header = (props: IProps) => {
               className="btn cursor-pointer text-base-content"
               onClick={handleChangeTheme}
             >
-              <SunMoon className="w-6 -mt-1 h-6" />
+              {theme === "light" ? <Sun></Sun> : <Moon></Moon>}
             </button>
 
             {/* SignedOut是在用户没有登录才显示 */}

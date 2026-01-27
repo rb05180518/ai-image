@@ -1,8 +1,10 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { getTaskStatus } from "@/lib/queue";
-import ImageGeneratorClient from "./components/ImageGeneratorClient";
+import GeneratorClient from "./components/GenerateClient/Index";
 import Generate from "./components/Generate/Index";
+import Sidebar from "./components/Sidebar/Index";
+import { PropsWithChildren } from "react";
 
 // 将 BigInt 转换为字符串
 function serializeUsage(usage: { id: bigint; [key: string]: unknown }) {
@@ -51,13 +53,18 @@ async function getUsages() {
   return usagesWithStatus;
 }
 
-export default async function ImageGeneratorPage() {
+export default async function Layout(props: PropsWithChildren) {
   const initialUsages = await getUsages();
+  const { children } = props;
 
   return (
-    <div className="w-full md:px-5 px-4">
-      <ImageGeneratorClient initialUsages={initialUsages} />
-      <Generate />
-    </div>
+    <>
+      <Sidebar />
+      <div className="w-full md:px-5 px-4 md:pl-24">
+        {children}
+        <GeneratorClient initialUsages={initialUsages} />
+        <Generate />
+      </div>
+    </>
   );
 }

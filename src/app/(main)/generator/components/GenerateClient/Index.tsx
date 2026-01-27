@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Masonry from "./Masonry/Index";
+import Masonry from "../Masonry/Index";
 import useTaskStore from "@/store/useTaskStore";
 
 const tabsOptions = [
