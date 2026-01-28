@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Masonry } from "antd";
 import Image from "next/image";
 import { useRef, useMemo, useEffect } from "react";
 import type { IQueueState } from "@/store/useTaskStore";
-import classNames from "classnames";
 import useTaskStore from "@/store/useTaskStore";
 
 // 生成模糊占位图的 base64 SVG
@@ -46,6 +46,7 @@ const exploreImages = [
 
 const sizeMap = {
   "5:4": 5 / 4,
+  "4:5": 4 / 5,
   "16:9": 16 / 9,
   "9:16": 9 / 16,
   "1:1": 1 / 1,
@@ -76,7 +77,7 @@ const App = (props: IProps) => {
   // 检测是否有进行中的任务，自动轮询（当有正在处理中的任务，即使刷新页面也会正常轮询）
   useEffect(() => {
     const hasActiveTask = usages.some(
-      (u) => u.queueState === "waiting" || u.queueState === "active"
+      (u) => u.queueState === "waiting" || u.queueState === "active",
     );
     if (hasActiveTask) {
       startPolling();
@@ -165,7 +166,7 @@ const App = (props: IProps) => {
                   quality={75}
                   placeholder="blur"
                   blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                    shimmer(200, 200)
+                    shimmer(200, 200),
                   )}`}
                   unoptimized={true}
                   onError={(e) => {
@@ -194,12 +195,22 @@ const App = (props: IProps) => {
               item.data.status === "active" ||
               item.data.status === "delayed") && (
               <div
-                className={classNames(
-                  "bg-base-300 animate-pulse rounded-lg overflow-hidden flex justify-center items-center"
-                )}
+                className="relative rounded-lg p-[2px] overflow-hidden"
                 style={{ aspectRatio: item.data.aspect }}
               >
-                Process...
+                {/* 旋转的彩色边框 */}
+                <div
+                  className="absolute inset-[-50%] animate-spin"
+                  style={{
+                    background:
+                      "conic-gradient(from 0deg, rgba(0,255,0,0.6), rgba(0,255,255,0.6), rgba(0,128,255,0.6))",
+                    animationDuration: "2s",
+                  }}
+                />
+                {/* 内容区域 */}
+                <div className="relative bg-base-300 rounded-md w-full h-full flex justify-center items-center">
+                  Processing...
+                </div>
               </div>
             )}
 

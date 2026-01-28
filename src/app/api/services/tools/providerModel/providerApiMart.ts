@@ -7,15 +7,15 @@ interface IResponse {
   };
 }
 
-export interface IProviderKieResult {
+export interface IProviderApiMartResult {
   submitTaskId: string;
   params: any;
 }
 
 export const providerApiMart = async <T>(
   params: T,
-  processParams: (params: T) => any
-): Promise<IProviderKieResult> => {
+  processParams: (params: T) => any,
+): Promise<IProviderApiMartResult> => {
   // 处理参数
   const processedParams = processParams(params);
 

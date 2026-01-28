@@ -4,8 +4,9 @@ import { NextResponse } from "next/server";
 import { addImageTask } from "@/lib/queue";
 import { prisma } from "@/lib/prisma";
 import type { IParams } from "@/store/useTaskStore";
-import { executeProvider } from "../../services/tools/providerModel";
+import { executeProvider } from "../../services/tools/providerModel/provider";
 import { allModels } from "@/config/model";
+import type { providerType } from "../../services/tools/providerModel";
 
 // 积分扣除
 const decreaseCredits = async (userId: string, body: IParams) => {
@@ -47,7 +48,10 @@ export async function POST(req: Request) {
     // 先扣积分后提交
     await decreaseCredits(user.id, body);
 
-    const { submitTaskId, params } = await executeProvider(body.provider, body);
+    const { submitTaskId, params } = await executeProvider<IParams>(
+      body.provider as providerType,
+      body,
+    );
 
     // 添加任务到队列
     await addImageTask({
