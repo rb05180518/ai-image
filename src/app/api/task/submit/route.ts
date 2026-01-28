@@ -9,7 +9,9 @@ import { allModels } from "@/config/model";
 
 // 积分扣除
 const decreaseCredits = async (userId: string, body: IParams) => {
-  const modelConfig = allModels.find((item) => item.value === body.model);
+  const modelConfig = Object.values(allModels)
+    .flat()
+    .find((item) => item.value === body.model);
   const cost = modelConfig!.credits;
 
   // 从 User 表读取剩余积分

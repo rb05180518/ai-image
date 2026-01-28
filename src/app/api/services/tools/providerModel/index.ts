@@ -1,20 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { providerKie, type IProviderKieResult } from "./providerKie";
-import { processNanoBanana } from "../processParams";
+import type { ProcessType } from "@/config/model";
+import {
+  processNanoBanana,
+  processNanoBananaPro,
+} from "../processParams/processImageParams";
+import { processSeedance15Pro } from "../processParams/processVideoParams";
 
 type ProcessParamsFunc<T> = (params: T) => any;
 type ProviderFunc = <T>(
   params: T,
-  processParams: ProcessParamsFunc<T>
+  processParams: ProcessParamsFunc<T>,
 ) => Promise<IProviderKieResult>;
 
-const providerMap: Record<string, [ProviderFunc, ProcessParamsFunc<any>]> = {
-  providerKie: [providerKie, processNanoBanana],
+const providerMap: Record<
+  string,
+  [ProviderFunc, Record<ProcessType, ProcessParamsFunc<any>>]
+> = {
+  providerKie: [
+    providerKie,
+    {
+      processNanoBanana: processNanoBanana,
+      processNanoBananaPro: processNanoBananaPro,
+      processSeedance10ProFast: processSeedance15Pro,
+      processSeedance15Pro: processSeedance15Pro,
+    },
+  ],
 };
 
+// params中可以拿到整个模型的字段
 export const executeProvider = async <T>(
   providerName: string,
-  params: T
+  params: any,
 ): Promise<IProviderKieResult> => {
   const provider = providerMap[providerName];
 
@@ -23,7 +40,10 @@ export const executeProvider = async <T>(
   }
 
   const [providerFunc, processParams] = provider;
-  return providerFunc<T>(params, processParams);
+  console.log(params, processParams, 888);
+
+  const fn = (processParams as any)[params.process];
+  return providerFunc<T>(params, fn);
 };
 
 export type { IProviderKieResult };

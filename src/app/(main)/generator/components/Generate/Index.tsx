@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, useState, useCallback } from "react";
+import { memo, useMemo, useState, useCallback, useEffect } from "react";
 import { Upload, Input } from "antd";
 import type { UploadProps } from "antd";
 import Image from "next/image";
@@ -14,8 +14,9 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Spinner } from "@/components/ui/spinner";
 import classNames from "classnames";
 import { RandomPrompts } from "@/app/(main)/components/Prompt";
-import { type ModelConfig, allModels } from "@/config/model";
+import { allModels, type ModelConfig, type ModelType } from "@/config/model";
 import { useUserInfo } from "@/hooks";
+import { usePathname } from "next/navigation";
 
 const { TextArea } = Input;
 
@@ -23,6 +24,7 @@ const { TextArea } = Input;
 const getDefaultParams = (model: ModelConfig): IParams => {
   const params: IParams = {
     provider: model.provider,
+    process: model.process,
     model: model.value,
     prompt: "",
   };
@@ -41,12 +43,13 @@ export const ModelComponents = (props: {
   isAutoRotating: boolean;
   params: IParams;
   currentModel: ModelConfig;
+  modelType: ModelType;
 }) => {
-  const { className, isAutoRotating, params, currentModel } = props;
+  const { className, isAutoRotating, params, currentModel, modelType } = props;
 
   const texts = useMemo(() => {
     if (isAutoRotating) {
-      return allModels.map((model) => model.label);
+      return allModels[modelType].map((model) => model.label);
     }
 
     // 将 params 的 value 转换为对应的 label
@@ -63,7 +66,7 @@ export const ModelComponents = (props: {
     // 模型名称 + 参数
     const displayText = `${currentModel.label} | ${paramLabels}`;
     return [displayText, displayText];
-  }, [isAutoRotating, params, currentModel]);
+  }, [isAutoRotating, params, currentModel, modelType]);
 
   return (
     <div className={className}>
@@ -87,14 +90,31 @@ export const ModelComponents = (props: {
 const Generate = () => {
   const { submitTask } = useTaskStore();
   const { refreshCredits } = useUserInfo();
+  const pathname = usePathname();
+
+  const modelType: ModelType = pathname.includes("image") ? "image" : "video";
 
   const [isAutoRotating, setIsAutoRotating] = useState(true);
   const [isShowModelSelect, setIsShowModelSelect] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [currentModel, setCurrentModel] = useState<ModelConfig>(allModels[0]);
-  const [params, setParams] = useState<IParams>(() =>
-    getDefaultParams(allModels[0]),
+  const [currentModel, setCurrentModel] = useState<ModelConfig>(
+    allModels[modelType][0],
   );
+
+  const [params, setParams] = useState<IParams>(() =>
+    getDefaultParams(allModels[modelType][0]),
+  );
+
+  // 当 modelType 变化时，重置 currentModel 和 params
+  useEffect(() => {
+    const newModel = allModels[modelType][0];
+
+    setCurrentModel(newModel);
+    setParams((prev) => ({
+      ...getDefaultParams(newModel),
+      prompt: prev.prompt, // 保留 prompt
+    }));
+  }, [modelType]);
 
   const handleModelClose = () => {
     setIsShowModelSelect(false);
@@ -143,6 +163,9 @@ const Generate = () => {
 
   // 提交生成任务
   const handleSubmit = async () => {
+    console.log(params, 8889989);
+
+    // return;
     try {
       if (!params.prompt) return;
 
@@ -190,7 +213,7 @@ const Generate = () => {
                   </p>
 
                   <div className="flex mt-4 gap-3">
-                    {allModels.map((item) => {
+                    {allModels[modelType].map((item) => {
                       return (
                         <div
                           key={item.value}
@@ -326,6 +349,7 @@ const Generate = () => {
                       isAutoRotating={isAutoRotating}
                       params={params}
                       currentModel={currentModel}
+                      modelType={modelType}
                     />
                     <Settings2 className="w-5 h-5 block md:hidden" />
                   </div>

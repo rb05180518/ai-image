@@ -4,6 +4,7 @@ import { showTaskCompletedNotification } from "@/contexts/NotificationContext";
 
 export interface IParams {
   provider: string;
+  process: string;
   prompt: string;
   model?: string;
   resolution?: string;
@@ -91,7 +92,7 @@ const useTaskStore = create<TaskStore>((set, get) => {
 
         // 自动停止轮询
         const hasActive = res.usages.some(
-          (u: Usage) => u.queueState === "waiting" || u.queueState === "active"
+          (u: Usage) => u.queueState === "waiting" || u.queueState === "active",
         );
 
         // 如果没有了正在处理的任务或者等待的任务。并且轮询在轮询的时候，停止轮询
@@ -102,9 +103,11 @@ const useTaskStore = create<TaskStore>((set, get) => {
     },
 
     submitTask: async (params: IParams) => {
+      console.log(params, 66);
+
       const data = await request.post<ISubmitResponse>(
         "/api/task/submit",
-        params
+        params,
       );
 
       if (data.success) {
